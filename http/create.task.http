@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/user/2/task
+Content-Type: application/json
+
+{
+  "body": "task body"
+}
