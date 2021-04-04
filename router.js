@@ -4,33 +4,25 @@ const TaskController = require('./controller/task.controller');
 const { checkUser } = require('./middlewares/user.mw');
 const router = Router();
 
-// router.use('/', (req, res, next) => {
-//   console.log('Time:', Date.now());
-//   next();
-// });
-
-/*
-  GET http://localhost:3001/api
-*/
-router.get('/', (req, res, next) => {
-  res.status(200).send('ok');
-});
-
-/*
-  GET http://localhost:3001/api/test
-*/
-router.get('/test', (req, res, next) => {
-  res.status(200).send('ok test');
-});
-
 router.post('/user', UserController.createUser);
-
 router.get('/users', UserController.getAllUsers);
 router.get('/user/:id', checkUser, UserController.getUser);
 router.patch('/user/:id', checkUser, UserController.updateUser);
 router.patch('/user-static/:id', UserController.updateStaticUser);
 router.delete('/user/:id', UserController.deleteUser);
 
-router.post('/user/:id/task', TaskController.createTask);
+router.post('/user/:id/task', checkUser, TaskController.createTask);
+router.get('/user/:id/tasks', checkUser, TaskController.getUserTasks);
+router.get('/user/:id/task/:taskId', checkUser, TaskController.getUserTask);
+router.patch(
+  '/user/:id/task/:taskId',
+  checkUser,
+  TaskController.updateUserTask,
+);
+router.delete(
+  '/user/:id/task/:taskId',
+  checkUser,
+  TaskController.deleteUserTask,
+);
 
 module.exports = router;

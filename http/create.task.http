@@ -1,6 +1,6 @@
-POST http://localhost:3001/api/user/2/task
+POST http://localhost:3001/api/user/1/task
 Content-Type: application/json
 
 {
-  "body": "task body"
+  "body": "this is a task"
 }
