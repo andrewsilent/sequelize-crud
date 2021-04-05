@@ -12,9 +12,29 @@ module.exports.createTask = async (req, res, next) => {
 
 module.exports.getUserTasks = async (req, res, next) => {
   try {
-    const { userInstance } = req;
-    const tasks = await userInstance.getTasks();
-    res.status(200).send({ data: tasks });
+    // const { userInstance } = req;
+    // const tasks = await userInstance.getTasks();
+    const {
+      params: { id },
+      query: { page = 1, size = 10 },
+    } = req;
+    if (page < 1 || size < 1) {
+      return res.status(400).send('bad request: pagination');
+    }
+    const { count: total, rows: tasks } = await Task.findAndCountAll({
+      where: {
+        userId: id,
+      },
+      limit: size,
+      offset: `${(page - 1) * size}`,
+    });
+    res.status(200).send({
+      tasksCount: total,
+      pagesCount: `${Math.ceil(total / size)}`,
+      pageSize: size,
+      currentPage: page,
+      data: tasks,
+    });
   } catch (err) {
     next(err);
   }

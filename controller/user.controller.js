@@ -12,12 +12,26 @@ module.exports.createUser = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.findAll({
-      attributes: {
-        exclude: ['password'],
+    const {
+      query: { page = 1, size = 10 },
+    } = req;
+    if (page < 1 || size < 1) {
+      return res.status(400).send('bad request: pagination');
+    }
+    const { count: total, rows: users } = await User.findAndCountAll({
+      attributer: {
+        exclide: ['password'],
       },
+      limit: size,
+      offset: (page - 1) * size,
     });
-    res.status(200).send({ data: users });
+    res.status(200).send({
+      usersCount: total,
+      pagesCount: `${Math.ceil(total / size)}`,
+      pageSize: size,
+      currentPage: page,
+      data: users,
+    });
   } catch (err) {
     next(err);
   }
