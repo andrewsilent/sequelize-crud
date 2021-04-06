@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const UserController = require('./controller/user.controller');
 const TaskController = require('./controller/task.controller');
+const GroupController = require('./controller/group.controller');
 const { checkUser } = require('./middlewares/user.mw');
 const router = Router();
 
@@ -24,5 +25,9 @@ router.delete(
   checkUser,
   TaskController.deleteUserTask,
 );
+
+router.post('/group', GroupController.createUserGroup);
+router.get('/group/:userId', GroupController.getUserGroup);
+router.delete('/group/:groupId', GroupController.deleteGroup);
 
 module.exports = router;
