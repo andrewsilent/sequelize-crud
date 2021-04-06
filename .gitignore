@@ -3,3 +3,4 @@
 !.prettierrc.json
 /node_modules/
 **/sandbox/
+/sequelize*.json
