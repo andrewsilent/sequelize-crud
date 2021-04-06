@@ -109,7 +109,7 @@ module.exports.taskSeed = [
     'including ',
     'but remember ',
     'but carefully ',
-    'but nothing of',
+    'but nothing of ',
     'without ',
     'catching the ',
     'considering ',
