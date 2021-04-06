@@ -19,7 +19,6 @@ module.exports = {
                   phraseList[Math.floor(Math.random() * phraseList.length)],
               )
               .join('');
-            console.log('body = ', body);
             return {
               user_id: u.id,
               body: body,
