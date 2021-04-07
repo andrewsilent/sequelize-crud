@@ -3,7 +3,18 @@ const UserController = require('./controller/user.controller');
 const TaskController = require('./controller/task.controller');
 const GroupController = require('./controller/group.controller');
 const { checkUser } = require('./middlewares/user.mw');
+const multer = require('multer');
 const router = Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, STATIC_PATH);
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}.${file.originalname}`);
+  },
+});
+const upload = multer({ storage });
 
 router.post('/user', UserController.createUser);
 router.get('/users', UserController.getAllUsers);
