@@ -38,7 +38,14 @@ router.delete(
 );
 
 router.post('/group', GroupController.createUserGroup);
+router.post('/group/:groupId', GroupController.addUserToGroup);
 router.get('/group/:userId', GroupController.getUserGroup);
 router.delete('/group/:groupId', GroupController.deleteGroup);
+
+router.post(
+  '/group/:groupId/image',
+  upload.single('image'),
+  GroupController.addImage,
+);
 
 module.exports = router;

@@ -27,6 +27,42 @@ module.exports.createUserGroup = async (req, res, next) => {
   }
 };
 
+module.exports.addUserToGroup = async (req, res, next) => {
+  try {
+    const {
+      params: { groupId },
+      body: { userId },
+    } = req;
+    const group = await Group.findByPk(groupId);
+    if (!group) {
+      return next(createError(400, 'Bad Request. Group was not created'));
+    }
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return next(createError(404, 'User not found'));
+    }
+    const userToGroup = await group.addUser(user, {
+      returning: true,
+    });
+    if (!userToGroup) {
+      return next(
+        createError(400, 'Bad request. Maybe user is already in group'),
+      );
+    }
+    // const result = await Group.findAll({
+    //   where: { id: userId },
+    //   through: 'users_to_groups',
+    //   exclude: ['password'],
+    // });
+    const result = await group.getUsers({
+      attributes: { exclude: ['password'] },
+    });
+    res.status(200).send({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports.getUserGroup = async (req, res, next) => {
   try {
     const {
@@ -60,6 +96,25 @@ module.exports.deleteGroup = async (req, res, next) => {
     }
     const result = await groupToDelete.destroy();
     res.status(202).send({ data: groupToDelete });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.addImage = async (req, res, next) => {
+  try {
+    const {
+      file: { filename },
+      params: { groupId },
+    } = req;
+    const [count, [updatedGroup]] = await Group.update(
+      { imagePath: filename },
+      {
+        where: { id: groupId },
+        returning: true,
+      },
+    );
+    res.send(updatedGroup);
   } catch (err) {
     next(err);
   }
