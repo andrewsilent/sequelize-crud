@@ -25,8 +25,8 @@ module.exports.getAllUsers = async (req, res, next) => {
       return next(err);
     }
     const { count: total, rows: users } = await User.findAndCountAll({
-      attributer: {
-        exclide: ['password'],
+      attributes: {
+        exclude: ['password'],
       },
       limit: size,
       offset: (page - 1) * size,

@@ -3,6 +3,8 @@ const UserController = require('./controller/user.controller');
 const TaskController = require('./controller/task.controller');
 const GroupController = require('./controller/group.controller');
 const { checkUser } = require('./middlewares/user.mw');
+const { STATIC_PATH } = require('./config/config');
+const path = require('path');
 const multer = require('multer');
 const router = Router();
 
